@@ -8,79 +8,80 @@ function IncorrectDataException(message) {
 }
 
 let Storage = {
-    put: (key, value) => {
+    put: (key, value, callback) => {
         if (typeof key != 'string' || _map[key] != undefined) {
             console.log('Data is incorrect');
             return;
         }
 
         _map[key] = value;
+        callback('Added ' + key + ' on position ' + value);
     },
 
-    get: (key) => {
+    get: (key, callback) => {
         if (typeof key != 'string' || _map[key] == undefined) {
             console.log('Data is incorrect');
             return;
         }
 
-        return _map[key];
+        return callback('Returned value: ' + _map[key]);
     },
 
-    getAll: () => {
+    getAll: (callback) => {
         if (Object.keys(_map).length == 0) {
             return 'The collection is empty.';
         }
 
-        return JSON.stringify(_map);
-
+        return callback('The map values are: ' + JSON.stringify(_map));
     },
 
-    update: (key, newValue) => {
+    update: (key, newValue, callback) => {
         if (typeof key != 'string' || _map[key] == undefined) {
             console.log('Data is incorrect');
             return;
         }
 
         _map[key] = newValue;
+        callback('Key ' + key + ' was updated');
     },
 
-    del: (key) => {
+    del: (key, callback) => {
         if (typeof key != 'string' || _map[key] == undefined) {
             console.log('Data is incorrect');
             return;
         }
 
         delete _map[key];
+        callback('Key' + key + ' was deleted.');
     },
 
-    clear: () => {
+    clear: (callback) => {
         _map = {};
+        return callback('The storage was cleared.');
     },
 
-    save: () => {
-        fs.writeFileSync('./storage.json', JSON.stringify(_map), 'utf8');
-        // fs.writeFile("./storage.json", JSON.stringify(_map), 'utf8', ((err) => {
-        //     if (err) {
-        //         return;
-        //     }
+    save: (callback) => {
+        fs.writeFile("./storage.json", JSON.stringify(_map), 'utf8', (err) => {
+            if (err) {
+                return;
+            }
 
-        //     callback();
-        // }));
+            callback("Data was saved in storage.json");
+        });
 
     },
 
-    load: () => {
-        _map = JSON.parse(fs.readFileSync('./storage.json'));
-        // fs.readFile('./storage.json', 'utf8', (err, txt) => {
+    load: (callback) => {
+        fs.readFile('./storage.json', 'utf8', (err, txt) => {
 
-        //     if (err) {
-        //         return;
-        //     }
+            if (err) {
+                return;
+            }
 
-        //     _map = JSON.parse(txt);
+            _map = JSON.parse(txt);
 
-        //     callback();
-        // });
+            callback("The storage was updated from 'storage.json' file");
+        });
     }
 };
 
