@@ -7,7 +7,6 @@ const handlers = require('./handlers/index');
 http.createServer((request, response) => {
 
     request.path = url.parse(request.url).pathname;
-    console.log("");
     for (let index = 0; index < handlers.length; index++) {
         let handler = handlers[index];
         
