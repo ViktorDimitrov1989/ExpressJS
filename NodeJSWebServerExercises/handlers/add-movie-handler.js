@@ -1,18 +1,20 @@
 /*jshint esversion: 6 */
 const fs = require('fs');
-const favicoIco = '/favicon.ico';
+const addMovieHtmlPath = './views/addMovie.html';
 
-module.exports = (request,response) => {
-    
-    if(request.path === favicoIco){
-        fs.readFile('./public/images' + favicoIco, (err, data) => {
+module.exports = (request, response) => {
+    let path = request.path;
+
+    if(path.startsWith('/addMovie')){
+        fs.readFile(addMovieHtmlPath, (err,data) => {
+
             if(err){
                 console.log(err);
                 return;
             }
 
             response.writeHead(200, {
-                'content-type': 'image/x-icon'
+                'content-type': 'text/html'
             });
 
             response.write(data);
@@ -22,7 +24,4 @@ module.exports = (request,response) => {
         return true;
     }
 
-};
-
-
-
+}

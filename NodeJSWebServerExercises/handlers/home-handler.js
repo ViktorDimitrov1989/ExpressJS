@@ -3,7 +3,7 @@ const fs = require('fs');
 const mainPagePath = './views/home.html';
 
 module.exports = (request, response) => {
-    if(request.path = '/'){
+    if(request.path === '/'){
         fs.readFile(mainPagePath, (err,data) => {
             if(err){
                 console.log(err);
@@ -20,6 +20,6 @@ module.exports = (request, response) => {
     }else{
         return true;
     }
-}
+};
 
 
