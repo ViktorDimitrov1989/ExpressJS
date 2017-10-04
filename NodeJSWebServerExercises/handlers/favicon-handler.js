@@ -1,13 +1,14 @@
 /*jshint esversion: 6 */
 const fs = require('fs');
 const favicoIco = '/favicon.ico';
+const errHandler = require('./error-handler.js');
 
 module.exports = (request,response) => {
     
     if(request.path === favicoIco){
         fs.readFile('./public/images' + favicoIco, (err, data) => {
             if(err){
-                console.log(err);
+                errHandler.handleError(request, response);
                 return;
             }
 
