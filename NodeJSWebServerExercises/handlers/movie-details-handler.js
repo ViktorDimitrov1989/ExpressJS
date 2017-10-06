@@ -25,7 +25,7 @@ module.exports = (request, response) => {
                 <img src="${unescape(obj.moviePoster)}" alt=""/>
                 <h3>Title  ${obj.movieTitle}</h3>
                 <h3>Year ${obj.movieYear}</h3>
-                <p> ${obj.movieDescription}</p>
+                <p> ${unescape(obj.movieDescription).replace(/\+/g, ' ')}</p>
                 </div>`);
 
             response.writeHead(200, {
