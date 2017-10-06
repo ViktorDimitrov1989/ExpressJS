@@ -4,6 +4,7 @@ const addMovieHtmlPath = './views/addMovie.html';
 const errHandler = require('./error-handler.js');
 const qs = require('querystring');
 const db = require('./../config/dataBase.js');
+const headerHandler = require('./header-handler.js');
 
 let getCreationForm = (request, response) => {
     fs.readFile(addMovieHtmlPath, 'utf8', (err, data) => {
@@ -16,6 +17,8 @@ let getCreationForm = (request, response) => {
         response.writeHead(200, {
             'content-type': 'text/html'
         });
+
+        data = headerHandler.handleHeader(data);
 
         response.write(data);
         response.end();
@@ -30,7 +33,6 @@ let addMovie = (request, response) => {
         //query string with values from the form
         body = Buffer.concat(body).toString();
         let movieObj = qs.parse(body);
-
         let isMovievalid = true;
 
         for (var key in movieObj) {
@@ -41,6 +43,7 @@ let addMovie = (request, response) => {
 
         if (isMovievalid) {
             db.push(movieObj);
+
             fs.readFile('./views/addMovie.html', (err, data) => {
                 if (err) {
                     console.log(err);
@@ -49,6 +52,8 @@ let addMovie = (request, response) => {
                 data = data.toString()
                     .replace('<div id="replaceMe">{{replaceMe}}</div>',
                     '<div id="succssesBox"><h2 id="succssesMsg">Movie Added</h2></div>');
+                data = headerHandler.handleHeader(data);
+
 
                 response.writeHead(200, {
                     'content-type': 'text-html'

@@ -3,6 +3,7 @@ const fs = require('fs');
 const db = require('./../config/dataBase.js');
 const url = require('url');
 const movieDetailsHtmlPath = './views/details.html';
+const headerHandler = require('./header-handler.js');
 
 module.exports = (request, response) => {
     let path = request.path;
@@ -27,7 +28,7 @@ module.exports = (request, response) => {
                 <h3>Year ${obj.movieYear}</h3>
                 <p> ${unescape(obj.movieDescription).replace(/\+/g, ' ')}</p>
                 </div>`);
-
+            data = headerHandler.handleHeader(data);
             response.writeHead(200, {
                 'content-type': 'text/html'
             });
@@ -38,7 +39,7 @@ module.exports = (request, response) => {
         });
         
     } else {
-        response.end();
+        //response.end();
 
         return true;
     }

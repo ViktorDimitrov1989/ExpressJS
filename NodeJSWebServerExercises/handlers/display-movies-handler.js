@@ -2,6 +2,7 @@
 const fs = require('fs');
 const db = require('./../config/dataBase.js');
 const viewAllHtmlPath = './views/viewAll.html';
+const headerHandler = require('./header-handler.js');
 
 module.exports = (request, response) => {
     let path = request.path;
@@ -24,7 +25,7 @@ module.exports = (request, response) => {
             }
 
             data = data.toString().replace('<div id="replaceMe">{{replaceMe}}</div>', str);
-            
+            data = headerHandler.handleHeader(data);
             response.writeHead(200, {
                 'content-type': 'text/html'
             });

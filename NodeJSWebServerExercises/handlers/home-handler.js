@@ -2,6 +2,7 @@
 const fs = require('fs');
 const mainPagePath = './views/home.html';
 const errHandler = require('./error-handler.js');
+const headerHandler = require('./header-handler.js');
 
 module.exports = (request, response) => {
     if(request.path === '/' && request.method === 'GET'){
@@ -15,7 +16,9 @@ module.exports = (request, response) => {
                 'content-type': 'text/html'
             });
 
-            response.write(data);
+            let str = headerHandler.handleHeader(data);
+            
+            response.write(str);
             response.end();
         });
     }else{
