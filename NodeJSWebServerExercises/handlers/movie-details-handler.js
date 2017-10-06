@@ -39,6 +39,7 @@ module.exports = (request, response) => {
         
     } else {
         response.end();
+
         return true;
     }
 

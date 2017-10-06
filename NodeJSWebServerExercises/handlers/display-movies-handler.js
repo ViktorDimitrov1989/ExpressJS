@@ -33,7 +33,7 @@ module.exports = (request, response) => {
             response.end();
         });
     } else {
-        response.end();
+        //response.end();
         return true;
     }
 
