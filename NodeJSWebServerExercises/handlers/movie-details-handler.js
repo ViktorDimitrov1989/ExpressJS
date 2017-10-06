@@ -36,7 +36,7 @@ module.exports = (request, response) => {
             response.end();
 
         });
-
+        
     } else {
         response.end();
         return true;
