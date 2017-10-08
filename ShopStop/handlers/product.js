@@ -22,8 +22,28 @@ module.exports = (req, resp) => {
 
             resp.write(data);
             resp.end();
-        })
+        });
+    }else if(pathname === '/product/add' && req.method === 'POST'){
+        let dataString = '';
+
+        req.on('data', (data) => {
+            dataString += data;
+        });
+
+        req.on('end', () => {
+            let product = querystring.parse(dataString);
+
+            database.products.add(product);
+
+            resp.writeHead(302, {
+                Location: '/'
+            });
+
+            resp.end();
+        });
     }else{
+        //warning
+        resp.end();
         return true;
     }
 } 

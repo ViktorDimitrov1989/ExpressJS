@@ -4,5 +4,4 @@ const staticFilesHandler = require('./static-files.js');
 const addProductViewHandler = require('./product.js');
 
 
-
 module.exports = [homeHandler, staticFilesHandler, addProductViewHandler];

@@ -36,7 +36,7 @@ module.exports = (req, resp) => {
                 //Show Error page
                 resp.writeHead(404, {
                     'content-type': 'text/plain'
-                })
+                });
 
                 resp.write('Resource not found.');
                 resp.end();
@@ -45,11 +45,11 @@ module.exports = (req, resp) => {
 
             resp.writeHead(200, {
                 'content-type': getContentType(req.pathname)
-            })
-            console.log('path: ' + req.pathname)
+            });
+            
             resp.write(data);
             resp.end();
-        })
+        });
 
 
     } else {
