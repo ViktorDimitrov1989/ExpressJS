@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 const http = require('http');
 const url = require('url');
-const port = 3000;
+const port = 8000;
 const handlers = require('./handlers');
 
 http.createServer((request, response) => {
