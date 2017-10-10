@@ -23,10 +23,30 @@ module.exports = (req, res) => {
     addMeme(req, res);
   } else if (req.pathname.startsWith('/getDetails') && req.method === 'GET') {
     getDetails(req, res);
-  } else {
+  }else if(req.pathname.startsWith('/download') && req.method === 'GET'){
+    downloadMeme(req, res);
+  }else {
     return true;
   }
 }
+
+let downloadMeme = (request, response) => {
+  let memeID = qs.parse(url.parse(request.url).query).id;
+  let meme = db.getDb().find((x) => {return x.id === memeID; });
+  let memeToDownloadpath = meme.memeSrc;
+
+  let readStream = fs.createReadStream(memeToDownloadpath);
+
+  let downloadFileName = shortid.generate();
+  fs.createReadStream(memeToDownloadpath).pipe(fs.createWriteStream(`downloads/${downloadFileName}.jpg`));
+
+  response.writeHead(200, {
+    'content-type': 'text/html'
+  });
+
+  response.write(`<h1>See ./downloads folder for your downloads</h1>`);
+  response.end();
+};
 
 let viewAll = (request, response) => {
 
@@ -75,7 +95,7 @@ let addMeme = (req, res) => {
 
   let form = new formidable.IncomingForm();
   
-  let dbLenght = Math.ceil(db.getDb().length / 10);
+  let dbLenght = Math.ceil(db.getDb().length / 1000);
   let memePath = `./public/memeStorage/${dbLenght}/${picName}.jpg`;
   form.on('error', (error) => {
     console.log(error);
@@ -121,7 +141,7 @@ let getDetails = (request, response) => {
     <img src="${meme.memeSrc}" alt=""/>
     <h3>Title  ${meme.title}</h3>
     <p> ${meme.description}</p>
-    <button><a href="${meme.posterSrc}">Download Meme</a></button>
+    <button><a href="/download?id=${memeID}">Download Meme</a></button>
     </div>`);
 
     defaultResponse(response, data);
