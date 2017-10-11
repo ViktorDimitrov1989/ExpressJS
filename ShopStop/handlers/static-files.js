@@ -16,6 +16,8 @@ function getContentType(url) {
         return 'image/jpg';
     } else if (url.endsWith('.ico')) {
         return 'image/x-icon';
+    }else {
+        return '';
     }
 
 }

@@ -48,7 +48,7 @@ module.exports = (req, resp) => {
 
                     product.image = filePath;
     
-                    fs.writeFile(`${filePath}`, dataString, {encoding: 'ascii'}, (err) => {
+                    fs.writeFile(`${filePath}.jpg`, dataString, {encoding: 'ascii'}, (err) => {
 
                         if(err){
                             console.log(err);
@@ -67,7 +67,6 @@ module.exports = (req, resp) => {
                 });
 
                 part.on('end', () => {
-
                     product[part.name] = field;
                 }) 
             }
