@@ -55,8 +55,6 @@ module.exports = (req, resp) => {
                             return;
                         }
 
-                        console.log('file saved');
-
                     })
                 })
 
