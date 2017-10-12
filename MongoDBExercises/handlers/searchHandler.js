@@ -15,81 +15,126 @@ module.exports = (req, res) => {
   if (req.pathname === '/search' && !isThereCriterias(searchCriterias)) {
     defaultSearch(req, res);
   } else if (req.pathname === '/search' && isThereCriterias(searchCriterias)) {
-    searchByCriterias(req, res, searchCriterias);
+    if (searchCriterias.beforeDate !== '' || searchCriterias.afterDate !== '') {
+      searchByTwoDates(req, res, searchCriterias.beforeDate, searchCriterias.afterDate);
+    } else {
+      searchByCriterias(req, res, searchCriterias);
+    }
+
   } else {
     return true;
   }
 }
 
+function searchByTwoDates(req, res, startDate, endDate) {
+  let endFormated = '2017-1-1';
+  let startFormated = '2180-1-1';
 
-function searchByCriterias(req, res, criteriasObj) {
-
-  Image
-    .find({})
-    .then(function (err, imageData) {
-
-      if (err) {
-        console.warn(err.message);
-        return;
-      }
-
-      let tagsNames = criteriasObj.tagName.split(',');
-      console.log(tagsNames);
-
-      Tag.find({ tagName: { $in: tagsNames } })
-        .then(function (err, tags) {
-
-          if (err) {
-            console.warn(err.message);
-            return;
-          }
-
-          for (var i of imageData) {
-
-            let tagIds = tags.map(t => t._id);
-
-            Image.find({ tagsID: { $in: tagIds } })
-              .then(function (err, filteredImages) {
-
-                fs.readFile(resultPath, (err, data) => {
-
-                  if (err) {
-                    console.warn(err);
-                    return;
-                  }
-
-                  let displayImages = '';
-
-                  for (let image of filteredImages) {
-                    displayImages += `<fieldset id => <legend>${image.imageTitle}:</legend> 
-                                                  <img src="${image.imageUrl}">
-                                                  </img><p>${image.description}<p/>
-                                                  <button onclick='location.href="/delete?id=${image._id}"'class='deleteBtn'>Delete
-                                                  </button> 
-                                                  </fieldset>`;
-                  }
-
-                  data = data
-                    .toString()
-                    .replace(`<div class='replaceMe'></div>`, displayImages);
+  if(startDate !== ''){
+    startFormated = new Date(startDate).toISOString();
+  }
+  
+  if(endDate !== ''){
+    endFormated = new Date(endDate).toISOString();
+  }
 
 
-                  res.writeHead(200, {
-                    'content-type': 'text/html'
-                  });
+  Image.find({
+    'creationDate': {
+      $gte: `${endFormated}`,
+      $lt: `${startFormated}`
+    }
+  })
+    .limit(10)
+    .then((images) => {
 
-                  res.write(data);
-                  res.end();
+      fs.readFile(resultPath, (err, data) => {
 
-                })
+        if (err) {
+          console.warn(data.message);
+          return;
+        }
 
-              })
-          }
-
-        })
+        printImages(res, data, images);
+      });
 
     })
     .catch(handleError);
+
+
+}
+
+function printImages(res, data, images) {
+  let replaceStr = '';
+  for (let image of images) {
+    replaceStr += `<fieldset id => <legend>${image.imageTitle}:</legend> 
+    <img src="${image.imageUrl}">
+    </img><p>${image.description}<p/>
+    <button onclick='location.href="/delete?id=${image._id}"'class='deleteBtn'>Delete
+    </button> 
+    </fieldset>`;
+  }
+  data = data.toString().replace(`<div class='replaceMe'></div>`, replaceStr);
+  
+  res.writeHead(200,
+    { 'content-type': 'text/html' });
+
+  res.write(data);
+  res.end();
+}
+
+function searchByCriterias(req, res, criteriasObj) {
+
+  let selectedTags = criteriasObj.tagName.split(', ');
+
+  Tag.find({ tagName: { $in: selectedTags } })
+    .populate('images')
+    .select('_id')
+    .then(function (data) {
+      let images = [];
+
+      for (let tag of data) {
+        for (let elem of tag.images) {
+          images.push(elem);
+        }
+      }
+
+      let uniqueArr = images.filter((elem, pos) => {
+        return images.indexOf(elem) == pos;
+      });
+
+      images.sort((a, b) => { return b.creationDate - a.creationDate; });
+
+      fs.readFile(resultPath, (err, data) => {
+
+        if (err) {
+          console.warn(err);
+          return;
+        }
+
+        let replaceStr = ``;
+
+        for (let image of images) {
+          replaceStr += `<fieldset id => <legend>${image.imageTitle}:</legend> 
+          <img src="${image.imageUrl}">
+          </img><p>${image.description}<p/>
+          <button onclick='location.href="/delete?id=${image._id}"'class='deleteBtn'>Delete
+          </button> 
+          </fieldset>`;
+        }
+        data = data.toString().replace(`<div class='replaceMe'></div>`, replaceStr);
+
+        res.writeHead(200,
+          { 'content-type': 'text/html' });
+
+        res.write(data);
+        res.end();
+
+      });
+
+    })
+    .catch(handleError);
+
 
 }
 

@@ -35,24 +35,35 @@ function addImage(req, res) {
     fields.tagsID.pop();
 
     Image.create(fields)
-      .then((savedImage) => {
-        console.log(savedImage);
+      .then((imageToSave) => {
+        //hard way
+        //addImageToTags(fields.tagsID, savedImage._id);
 
-        addImageToTags(fields.tagsID, savedImage._id);
+        let targetedTags = imageToSave.tagsID;
+        Tag.update(
+          {_id:{$in: targetedTags}},
+          {$push: {images: imageToSave._id}}, 
+          {multi: true})
+        .then((resolve) => {
+          //console.log(resolve);
 
-        res.writeHead(302, {
-          Location: '/'
-        });
-
-        res.end();
+        })
+        .catch(handleError);
 
       })
       .catch(handleError);
+
+      res.writeHead(302, {
+        Location: '/'
+      });
+
+      res.end();
 
   });
 
 }
 
+//hard way
 function addImageToTags(tags, imageId) {
   for (var tag of tags) {
     Tag.findById(tag, (err, tagToUpdate) => {
