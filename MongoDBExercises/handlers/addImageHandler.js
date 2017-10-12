@@ -22,7 +22,7 @@ function addImage(req, res) {
     console.log(err);
     return;
   });
-
+ 
   form.parse(req, (err, fields, files) => {
 
     if (err) {
