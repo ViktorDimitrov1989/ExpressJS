@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 const formidable = require('formidable');
 const fs = require('fs');
+const url = require('url');
 let Image = require('./../models/ImageSchema');
 let Tag = require('./../models/TagSchema');
 
@@ -8,10 +9,30 @@ module.exports = (req, res) => {
   if (req.pathname === '/addImage' && req.method === 'POST') {
     addImage(req, res);
   } else if (req.pathname === '/delete' && req.method === 'GET') {
-    //deleteImg(req, res);
+    deleteImg(req, res);
   } else {
     return true;
   }
+}
+
+
+function deleteImg(req, res){
+  let idToDel = (url.parse(req.url, true).query).id;
+
+  Image.findByIdAndRemove(idToDel)
+  .exec()
+  .then((delRes) => {
+
+    console.log(delRes);
+
+    res.writeHead(302, {
+      Location: '/'
+    });
+
+    res.end();
+  })
+  .catch(handleError);
+
 }
 
 function addImage(req, res) {
