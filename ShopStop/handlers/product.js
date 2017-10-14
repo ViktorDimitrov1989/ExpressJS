@@ -5,8 +5,7 @@ const path = require('path');
 const querystring = require('querystring');
 const multiparty = require('multiparty');
 const shortid =  require('shortid');
-const database = require('./../config/database.js');
-
+const Product = require('../models/Product');
 
 module.exports = (req, resp) => {
     req.pathname = req.pathname || url.parse(req.url).pathname
@@ -74,13 +73,14 @@ module.exports = (req, resp) => {
 
 
         form.on('close', () => {
-            database.products.add(product);
-
-            resp.writeHead(302, {
-                Location: '/'
+            Product.create(product)
+            .then(() => {
+                resp.writeHead(302, {
+                    Location: '/'
+                });
+    
+                resp.end();
             });
-
-            resp.end();
         });
 
         form.parse(req);

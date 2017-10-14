@@ -3,7 +3,10 @@ const http = require('http');
 const url = require('url');
 const port = 8000;
 const handlers = require('./handlers');
-
+let environment = process.env.NODE_ENV || 'development';
+const config = require('./config/config');
+const database = require('./config/database.config');
+database(config[environment]);
 http.createServer((request, response) => {
     request.path = url.parse(request.url).pathname;
 

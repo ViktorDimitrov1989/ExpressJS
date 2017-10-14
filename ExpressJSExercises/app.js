@@ -1,15 +1,19 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+let express = require('express');
+let path = require('path');
+let favicon = require('serve-favicon');
+let logger = require('morgan');
+let cookieParser = require('cookie-parser');
+let bodyParser = require('body-parser');
+let fileUploader = require('express-fileupload');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+let index = require('./routes/index');
+let addMeme = require('./routes/addMeme');
+let searchMemes = require('./routes/searchMemes');
+let viewAllMemes = require('./routes/viewAllMemes');
+let addGenre = require('./routes/addGenre');
 
-var app = express();
-require('./config/db')
+let app = express();
+require('./config/db');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -21,13 +25,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(fileUploader());
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/addMeme', addMeme);
+app.use('/viewAllMemes', viewAllMemes);
+app.use('/searchMeme', searchMemes);
+app.use('/addGenre', addGenre);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
