@@ -5,10 +5,12 @@ const Meme = require('../models/MemeSchema');
 
 /* GET searchMemes page. */
 router.get('/', function (req, res, next) {
-    console.log(req.params);
-    console.log(req.type);
-    let meme = req.params;
-    res.render('getMemeDetails', {meme: meme});
+
+    Meme.findById(req.query.id)
+    .then(meme => {
+        res.render('getMemeDetails', {meme: meme});
+    });
+    
 });
 
 module.exports = router;

@@ -1,121 +1,62 @@
 /*jshint esversion: 6 */
-const url = require('url');
 const fs = require('fs');
 const path = require('path');
-const querystring = require('querystring');
-const multiparty = require('multiparty');
-const shortid = require('shortid');
 
 const Product = require('../models/Product');
 const Category = require('../models/Category');
 
-module.exports = (req, resp) => {
-    req.pathname = req.pathname || url.parse(req.url).pathname
+module.exports.addGet = (req, resp) => {
+    let filePath = path.normalize(path.join(__dirname, '../views/products/add.html'));
 
-    let pathname = req.pathname;
+    fs.readFile(filePath, (err, data) => {
 
-    if (pathname === '/product/add' && req.method === 'GET') {
-        let filePath = path.normalize(path.join(__dirname, '../views/products/add.html'));
+        if (err) {
+            console.log(err);
+            return;
+        }
 
-        fs.readFile(filePath, (err, data) => {
+        Category.find({})
+            .then((categories) => {
+                let replacement = '<select class="input-field" name="category">';
 
-            if (err) {
-                console.log(err);
-                return;
-            }
+                for (let cat of categories) {
+                    console.log(cat.name);
+                    replacement += `$<option value="${cat._id}">${cat.name}</option>`;
+                }
 
-            Category.find({})
-                .then((categories) => {
-                    let replacement = '<select class="input-field" name="category">';
+                replacement += `</select>`;
 
-                    for (let cat of categories) {
-                        console.log(cat.name);
-                        replacement += `$<option value="${cat._id}">${cat.name}</option>`;
-                    }
+                let html = data.toString().replace('{categories}', replacement);
 
-                    replacement += `</select>`;
-
-                    let html = data.toString().replace('{categories}', replacement);
-
-                    resp.writeHead(200, {
-                        'content-type': 'text/html'
-                    });
-
-                    resp.write(html);
-                    resp.end();
-
-                })
-
-
-
-        });
-
-    } else if (pathname === '/product/add' && req.method === 'POST') {
-        let form = new multiparty.Form();
-        let product = {};
-
-        form.on('part', (part) => {
-
-            if (part.filename) {
-                let dataString = '';
-
-                part.setEncoding('binary');
-                part.on('data', (data) => {
-                    dataString += data;
-                })
-
-                part.on('end', () => {
-                    let filename = shortid.generate();
-
-                    let filePath = './content/images/' + filename;
-
-                    product.image = filePath;
-
-                    fs.writeFile(`${filePath}.jpg`, dataString, { encoding: 'ascii' }, (err) => {
-
-                        if (err) {
-                            console.log(err);
-                            return;
-                        }
-
-                    })
-                })
-
-            } else {
-                part.setEncoding('utf8');
-                let field = '';
-
-                part.on('data', (data) => {
-                    field += data;
+                resp.writeHead(200, {
+                    'content-type': 'text/html'
                 });
 
-                part.on('end', () => {
-                    product[part.name] = field;
-                })
-            }
-        })
+                resp.write(html);
+                resp.end();
+
+            })
 
 
-        form.on('close', () => {
-            Product.create(product)
-                .then((insertedProduct) => {
-                    Category.findById(product.category)
-                        .then(category => {
-                            category.products.push(product.category);
-                            console.log(product);
-                            category.save();
-                            
-                            resp.writeHead(302, {
-                                Location: '/'
-                            });
 
-                            resp.end();
-                        });
-                });
+    });
+}
+
+module.exports.addPost = (req,res) => {
+    let product = req.body;
+
+    product.image = '\\' + req.file.path;
+
+    Product
+    .create(product)
+    .then((createdProduct) => {
+        Category.findById(createdProduct.category)
+        .then((category) => {
+            category.products.push(createdProduct._id)
+            category.save();
         });
+        res.redirect('/');
+    });
 
-        form.parse(req);
-    } else {
-        return true;
-    }
+
 } 
