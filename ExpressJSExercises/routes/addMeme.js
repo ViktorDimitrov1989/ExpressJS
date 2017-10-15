@@ -13,14 +13,13 @@ router.get('/', function (req, res, next) {
 
 })
   .post('/', (req, res, next) => {
-    //console.log(req.files)
-    //console.log(req.body);
     let file = req.files.meme;
     let memeObj = req.body;
-    let pathMeme = `./${file.name}`;
+    let pathMeme = `./views/images/${file.name}`;
     memeObj.memePath = pathMeme;
 
     file.mv(pathMeme, (err) => {
+      console.log(pathMeme);
       if (err) {
         console.log(err);
         return;
@@ -30,12 +29,14 @@ router.get('/', function (req, res, next) {
     Meme
       .create(memeObj)
       .then((newMeme) => {
-        let targetGenre = files.genreSelect;
+        let targetGenre = memeObj.genreSelect;
 
         Genre.findOne({ genreName: targetGenre }).then((foundedGenre) => {
-          foundedGenre.push(targetGenre._id);
+          foundedGenre.memeList.push(newMeme._id);
           foundedGenre.save().then(() => {
-            res.render('addMeme', { status: true });
+            Genre.find({}).then((genres) => {
+              res.render('addMeme', {genres: genres, status: true});
+            });
           });
         });
       });

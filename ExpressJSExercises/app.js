@@ -11,6 +11,8 @@ let addMeme = require('./routes/addMeme');
 let searchMemes = require('./routes/searchMemes');
 let viewAllMemes = require('./routes/viewAllMemes');
 let addGenre = require('./routes/addGenre');
+let getMemeDetails = require('./routes/getMemeDetails');
+
 
 let app = express();
 require('./config/db');
@@ -25,6 +27,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use("/views/images", express.static(__dirname + '/views/images'));
 app.use(fileUploader());
 
 app.use('/', index);
@@ -32,6 +35,7 @@ app.use('/addMeme', addMeme);
 app.use('/viewAllMemes', viewAllMemes);
 app.use('/searchMeme', searchMemes);
 app.use('/addGenre', addGenre);
+app.use('/getDetails', getMemeDetails);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

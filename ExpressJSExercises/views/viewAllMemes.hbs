@@ -1,9 +1,14 @@
 <h1>Here are your memes</h1>
-<div class="container">
+
+<ul class="meme_list">
+    <div class="container"></div>
+    {{#each memes}}
     <div class="meme">
-        <a href="/getDetails?id=HJRGz0-hZ">
-            <img class="memePoster" src="./public/memeStorage/1/ryeAMzAb2b.jpg">
+        <a href="/getDetails?id={{this._id}}">
+            <img class="memePoster" src="{{this.memePath}}">
         </a>
     </div>
-</div>
-<a href="/getDetails?id=HkqlbRb3W"></a>
+    {{/each}}
+    </div>
+    <a href="/getDetails?id={{this._id}}"></a>
+</ul>

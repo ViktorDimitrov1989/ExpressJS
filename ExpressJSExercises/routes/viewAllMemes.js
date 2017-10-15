@@ -1,10 +1,17 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET viewAll listing. */
+const Meme = require('./../models/MemeSchema');
+
+/* GET viewAll memes listing. */
 router.get('/', function (req, res, next) {
     //TODO get all memes and pass them
-    res.render('viewAllMemes');
+    Meme
+    .find({})
+    .then((memes) => {
+        console.log(memes);
+        res.render('viewAllMemes', {memes: memes});
+    });
 });
 
 module.exports = router;

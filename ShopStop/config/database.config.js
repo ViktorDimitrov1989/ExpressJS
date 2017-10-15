@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+require('../models/Category');
+require('../models/Product');
 
 mongoose.Promise = global.Promise;
 
