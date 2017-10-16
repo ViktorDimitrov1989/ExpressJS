@@ -5,7 +5,8 @@ const bodyParser = require('body-parser');
 module.exports = (app, config) => {
     //Config middleware for patsing form data
     app.use(bodyParser.urlencoded({ extended: true }));
-
+    app.set('view engine', 'pug');
+    app.set('views', path.join(config.rootPath, 'views'));
     //Configure public folder
     app.use((req, res, next) => {
         if(req.url.startsWith('/content')){

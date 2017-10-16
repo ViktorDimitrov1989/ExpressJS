@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-let Category = require('../models/Category.js');
+let Category = require('../models/Category');
 
-module.exports.addGet = (req,res) => {
+module.exports.addGet = (req, res) => {
     res.render('category/add');
 }
 
@@ -10,10 +10,24 @@ module.exports.addPost = (req, res) => {
     let category = req.body;
 
     Category
-    .create(category)
-    .then((createdCategory) => {
-        res.redirect('/');
-    });
+        .create(category)
+        .then((createdCategory) => {
+            res.redirect('/');
+        });
+}
 
-    
+module.exports.productByCategory = (req, res) => {
+    let categoryName = req.params.category;
+
+    Category
+        .findOne({ name: categoryName })
+        .populate('products')
+        .then((category) => {
+            if (!category) {
+                res.sendStatus(404);
+                return;
+            }
+
+            res.render('category/products', { category: category });
+        })
 }
