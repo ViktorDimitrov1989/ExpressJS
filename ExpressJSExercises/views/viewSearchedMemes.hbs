@@ -1,0 +1,14 @@
+<h1>Result from your search</h1>
+
+<ul class="meme_list">
+    <div class="container"></div>
+    {{#each memes}}
+    <div class="meme">
+        <a href="/getDetails?id={{this._id}}">
+            <img class="memePoster" src="{{this.memePath}}">
+        </a>
+    </div>
+    {{/each}}
+    </div>
+    <a href="/getDetails?id={{this._id}}"></a>
+</ul>

@@ -9,7 +9,6 @@ router.get('/', function (req, res, next) {
     Meme
     .find({})
     .then((memes) => {
-        console.log(memes);
         res.render('viewAllMemes', {memes: memes});
     });
 });

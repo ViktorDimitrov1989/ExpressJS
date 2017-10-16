@@ -12,7 +12,7 @@ let searchMemes = require('./routes/searchMemes');
 let viewAllMemes = require('./routes/viewAllMemes');
 let addGenre = require('./routes/addGenre');
 let getMemeDetails = require('./routes/getMemeDetails');
-
+let deleteMeme = require('./routes/deleteMeme');
 
 let app = express();
 require('./config/db');
@@ -36,6 +36,7 @@ app.use('/viewAllMemes', viewAllMemes);
 app.use('/searchMeme', searchMemes);
 app.use('/addGenre', addGenre);
 app.use('/getDetails', getMemeDetails);
+app.use('./viewSearchedMemes', searchMemes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,9 +1,12 @@
-<h1>Here are your memes</h1>
-<div class="container">
-    <div class="meme">
-        <a href="/getDetails?id=HJRGz0-hZ">
-            <img class="memePoster" src="./public/memeStorage/1/ryeAMzAb2b.jpg">
-        </a>
-    </div>
-</div>
-<a href="/getDetails?id=HkqlbRb3W"></a>
+<h1>Search meme</h1>
+<form action="/searchMeme" method="POST">
+    <label for="memeName">Meme name</label>
+    <input type="text" id="memeName" name="memeName" placeholder="The title of the meme">
+
+    <select name="genreSelect" id="genreSelect">
+        {{#each genres}}
+            <option>{{this.genreName}}</option>
+        {{/each}}
+    </select>
+    <input type="submit" value="Submit">
+</form>
