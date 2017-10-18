@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const ObjectId = mongoose.Schema.Types.ObjectId;
 let productSchema = mongoose.Schema({
     name: {type: mongoose.Schema.Types.String, require: true},
     description: {type: mongoose.Schema.Types.String},
@@ -11,7 +11,8 @@ let productSchema = mongoose.Schema({
     },
     image: mongoose.Schema.Types.String,
     category: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'},
-    isBought: {type: mongoose.Schema.Types.Boolean, default: false}
+    creator: {type: ObjectId, ref: 'User', required: true},
+    buyer: {type: ObjectId, ref: 'User', required: true}
 })
 
 let Product = mongoose.model('Product', productSchema);

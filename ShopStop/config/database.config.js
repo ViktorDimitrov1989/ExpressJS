@@ -24,5 +24,5 @@ module.exports = (config) => {
         console.log(err);
     })
 
-    require('../models/Product');
+    require('../models/User').seedAdminUser();
 }

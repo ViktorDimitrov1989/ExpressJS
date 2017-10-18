@@ -8,7 +8,6 @@ const Category = require('../models/Category');
 module.exports.addGet = (req, resp) => {
     Category.find({})
         .then((categories) => {
-            console.log(categories);
             resp.render('products/add', { categories });
         })
 }
