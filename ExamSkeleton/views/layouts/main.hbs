@@ -9,6 +9,7 @@
 
 <body>
     <div class="container">
+
         <head>
             <ul class="menu">
                 <li>
@@ -17,13 +18,27 @@
                 <li>
                     <a href="/about">About</a>
                 </li>
+                {{#if currentUser}}
+                <li>Hello {{currentUser.username}}</li>
+                <li>
+                    <form  id="logout-form" action="/logout" method="POST"></form>
+                    <a href="javascript:document.getElementById('logout-form').submit()">Logout</a>
+                </li>
+                {{else}}
                 <li>
                     <a href="/register">Register</a>
                 </li>
+                <li>
+                    <a href="/login">Login</a>
+                </li>
+                {{/if}}
+
             </ul>
         </head>
         <main>
-            {{{body}}}
+            {{#if globalError}}
+            <span>{{globalError}}</span>
+            {{/if}} {{{body}}}
         </main>
     </div>
 

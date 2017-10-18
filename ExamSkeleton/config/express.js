@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
 
+
 module.exports = (app) => {
     app.engine('hbs', handlebars({
         defaultLayout: 'main',
@@ -21,6 +22,12 @@ module.exports = (app) => {
     app.use(passport.initialize());
     app.use(passport.session());
 
+    app.use((req,res,next) => {
+        if(req.user){
+            res.locals.currentUser = req.user;
+        }
+        next();
+    })
 
     app.set('view engine', '.hbs');
 

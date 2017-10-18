@@ -1,6 +1,17 @@
   .container {
     padding-left: 25%
   }
+
+  header{
+
+    margin-bottom: 2em 
+
+  }
+
+  .error{
+    color: red
+  }
+  
   .menu {
     list-style-type: none;
     padding-left: 0;
