@@ -4,6 +4,7 @@ mongoose.Promise = global.Promise;
 
 const User = require('../models/User');
 const Car = require('../models/Car');
+const KeyChain = require('../models/KeyChain');
 
 module.exports = (config) => {
     mongoose.connect(config.dbPath, {

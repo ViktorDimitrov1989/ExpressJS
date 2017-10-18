@@ -1,0 +1,23 @@
+ {{#each cars}}
+<a href="details/{{this._id}}">
+  <fieldset>
+    <div class="car">
+      <label>Brand:</label>
+      <p>{{this.brand}}</p>
+
+      <label>Model:</label>
+      <p>{{this.model}}</p>
+      <label>Price per day:</label>
+      <p>{{this.pricePerDay}}</p>
+      <label>Image:</label>
+      <p>
+        <img src="{{this.image}}" alt="carImage">
+      </p>
+      
+    </div>
+  </fieldset>
+</a>
+{{/each}}
+
+<a href="viewAll?page={{page.prevPage}}">previous</a>
+<a href="viewAll?page={{page.nextPage}}">next</a>

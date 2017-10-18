@@ -10,6 +10,9 @@ module.exports = (app) => {
     app.get('/login', controllers.user.loginGet);
     app.post('/login', controllers.user.loginPost);
 
+    //user details
+    app.get('/profile/:id', controllers.user.getProfile);
+
     //Admin Func
     app.get('/addCar', auth.hasRole('Admin'), controllers.admin.addCarGet);
     app.post('/addCar', controllers.admin.addCarPost);
@@ -17,7 +20,13 @@ module.exports = (app) => {
     //Query Func
     app.get('/viewAll', controllers.query.viewAll);
 
-    app.all('*', (req,res) => {
+    //Rent logic
+    app.get('/details/:id', controllers.rent.getRentDetails);
+    app.post('/rent/:id', controllers.rent.rentCar);
+
+
+
+    app.all('*', (req, res) => {
         res.status(404);
         res.send('404 Not Found');
         res.end();

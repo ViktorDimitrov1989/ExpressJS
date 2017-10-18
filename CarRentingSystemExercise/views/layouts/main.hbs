@@ -16,7 +16,7 @@
                     <a href="/">Home</a>
                 </li>
                 <li>
-                    <a href="/viewAll?page=1">View All Cars</a>
+                    <a href="/viewAll?page=0">View All Cars</a>
                 </li>
                 <li>
                     <a href="/about">About</a>
@@ -31,6 +31,9 @@
                 <li>
                     <form  id="logout-form" action="/logout" method="POST"></form>
                     <a href="javascript:document.getElementById('logout-form').submit()">Logout</a>
+                </li>
+                <li>
+                    <a href="/profile/{{currentUser.id}}">Profile</a>
                 </li>
                 {{else}}
                 <li>

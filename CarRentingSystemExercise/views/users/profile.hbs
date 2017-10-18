@@ -1,0 +1,20 @@
+<h1>Profile</h1>
+<table style="width:100%">
+
+    <tr>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Production year</th>
+        <th>Price per day</th>
+        <th>Rented for</th>
+    </tr>
+    {{#each keyChains}}
+    <tr>
+        <td>{{this.brand}}</td>
+        <td>{{this.model}}</td>
+        <td>{{this.productionYear}}</td>
+        <td>{{this.pricePerDay}}</td>
+        <td>{{this.rentTime}} days</td>
+    </tr>
+    {{/each}}
+</table>

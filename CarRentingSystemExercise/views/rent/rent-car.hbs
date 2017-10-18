@@ -1,0 +1,23 @@
+<fieldset>
+
+</fieldset>
+
+<form action="/rent/{{car._id}}" method="POST">
+    <fieldset>
+
+        <label>Brand:</label>
+        <p>{{car.brand}}</p>
+        <label>Model:</label>
+        <p>{{car.model}}</p>
+        <label>Price per day:</label>
+        <p>{{car.pricePerDay}}</p>
+        <label>Image:</label>
+        <p>
+            <img src="{{car.image}}" alt="carImage">
+        </p>
+        <label>End date:</label>
+        <br>
+        <input type="number" name="days", placeholder="Days">
+        <input type="submit" value="Rent Car">
+    </fieldset>
+</form>
