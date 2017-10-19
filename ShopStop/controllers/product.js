@@ -56,14 +56,13 @@ module.exports.editGet = (req, res) => {
                 res.redirect('/');
             }
 
-
         });
 }
 
 module.exports.editPost = (req, res) => {
     let id = req.params.id;
     let editedProduct = req.body;
-    console.log(id);
+
     Product.findById(id)
         .then((product) => {
             if (!product) {
