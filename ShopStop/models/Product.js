@@ -12,7 +12,7 @@ let productSchema = mongoose.Schema({
     image: mongoose.Schema.Types.String,
     category: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'},
     creator: {type: ObjectId, ref: 'User', required: true},
-    buyer: {type: ObjectId, ref: 'User', required: true}
+    buyer: {type: ObjectId, ref: 'User'}
 })
 
 let Product = mongoose.model('Product', productSchema);
