@@ -1,0 +1,32 @@
+
+<h1>User Details</h1>
+<fieldset>
+    <legend>
+        <p>{{user.username}}</p>
+    </legend>
+    <p>{{user.firstName}}</p>
+    <p>{{this.lastName}}</p>
+</fieldset>
+
+<h1>Hotels</h1>
+{{#each hotels}}
+<a href="/details?id={{this._id}}">
+    <fieldset>
+        <legend>{{this.title}}</legend>
+        <p>{{this.location}}</p>
+        <img class="hotelImg" src="{{this.image}}" alt="hotel image">
+        <p>{{this.description}}</p>
+    </fieldset>
+</a>
+{{/each}}
+
+<h1>Comments</h1>
+{{#each comments}}
+<fieldset>
+    <legend>
+        <p>{{this.creator}}</p>
+    </legend>
+    <p>{{this.comment}}</p>
+    <p>{{this.datePosted}}</p>
+</fieldset>
+{{/each}}
