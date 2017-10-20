@@ -13,6 +13,11 @@ module.exports = {
             encryprtion.generateHashedPassword(salt, reqUser.password);
 
         try {
+
+            if(reqUser.password === '' || reqUser.password.match(/(\s)/)){
+                throw new Error('Password cant have empty sapces!')
+            }
+
             const user = await User.create({
                 username: reqUser.username,
                 hashedPass: passwordhashed,
