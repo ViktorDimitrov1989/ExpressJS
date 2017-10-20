@@ -4,12 +4,20 @@ block content
         .wrapper.chat
             if messages
                 each message in messages
-                    - positionClass= message.user._id.equals(user._id)? 'right' : 'left'
+                    - positionClass=message.user._id.equals(user._id)? 'right' : 'left'
                     .thread-message(class=positionClass)
-                        span= message.content                   
+                        if message.isLink
+                            a(href=message.content target='_blank')= message.content
+                        if message.isImage
+                            img.message-img(src=message.content)
+                        else
+                            span= message.content                  
                     .clear
         .wrapper
-             form(method='post')
+            if blocked
+                h2 You are blocked
+            else
+                form(method='post')
                     .form-group
-                        textarea#chat-form.input-field(name='content')= newMessage
+                        textarea#chat-form.input-field(name='content')=newMessage
                         input.btn.btn-primary(type='submit' value='Send')

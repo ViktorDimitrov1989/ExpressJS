@@ -15,7 +15,6 @@ module.exports = {
           if (error) {
             data.error = error
           }
-
           res.render('home/index', data)
         })
 

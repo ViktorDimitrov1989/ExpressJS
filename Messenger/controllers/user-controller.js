@@ -89,17 +89,17 @@ module.exports = {
 
       Thread.findOne({ users: { $all: [userToChatWith._id, currentUser._id] } }).then((existingThread) => {
 
-        if(!existingThread){
+        if (!existingThread) {
           let threadToCreate = {
             users: [userToChatWith._id, currentUser._id]
           };
 
           Thread.create(threadToCreate)
             .then(() => {
-            currentUser.otherUsers.push(userToChatWith._id);
-            userToChatWith.otherUsers.push(currentUser._id);
-            Promise.all([currentUser.save(), userToChatWith.save()]);
-          })
+              currentUser.otherUsers.push(userToChatWith._id);
+              userToChatWith.otherUsers.push(currentUser._id);
+              Promise.all([currentUser.save(), userToChatWith.save()]);
+            })
         }
 
         res.redirect(`/thread/${userToChatWith.username}`)
@@ -109,9 +109,45 @@ module.exports = {
       console.log(err);
     })
 
+  },
+  block: (req, res) => {
+    let userToBlockId = req.params.id;
+
+    User.findById(userToBlockId).then((foundedUser) => {
+
+      if (!foundedUser) {
+        return res.redirect('/?error=User does not exist.');
+      }
+
+      if (req.user.blockedUsers.indexOf(userToBlockId) >= 0) {
+        return res.redirect('/?error=User already blocked.');
+      }
+
+      req.user.blockedUsers.push(userToBlockId);
+      req.user.save().then(() => {
+        res.redirect('/');
+      })
+    })
+  },
+  unblock: (req, res) => {
+    let userToUnblock = req.params.id;
+
+    let removeIndex = req.user.blockedUsers.indexOf(userToUnblock);
+
+    if(removeIndex >= 0){
+      req.user.blockedUsers.splice(removeIndex, 1);
+
+      req.user.save().then(() => {
+        res.redirect('/');
+      })
+
+    }else{
+      return res.redirect('/?error=User is not blocked.');
+    }
 
 
   }
+
 
 
 }

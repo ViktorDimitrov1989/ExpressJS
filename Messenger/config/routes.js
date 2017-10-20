@@ -8,7 +8,11 @@ module.exports = app => {
   app.get('/user/login', controllers.user.login.get)
   app.post('/user/login', controllers.user.login.post)
   app.get('/user/find', controllers.user.find);
-  app.get('/thread/:username',  controllers.thread.chatRoomGet);
+  app.get('/thread/:username', controllers.thread.chatRoomGet);
+  app.post('/thread/:username', controllers.thread.chatRoomPost);
+  app.get('/user/:id/block', controllers.user.block);
+  app.get('/user/:id/unblock', controllers.user.unblock);
+
 
   app.all('*', (req, res) => {
     res.status(404)

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const encryption = require('../util/encryption')
+const ObjectId = mongoose.Schema.Types.ObjectId;
+
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -12,7 +14,8 @@ const userSchema = new mongoose.Schema({
   lastName: { type: mongoose.Schema.Types.String },
   salt: { type: mongoose.Schema.Types.String, required: true },
   otherUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', default: [] }],
-  roles: [{ type: mongoose.Schema.Types.String }]
+  roles: [{ type: mongoose.Schema.Types.String }],
+  blockedUsers: [{type: ObjectId, ref: 'User', default: []}]
 })
 
 userSchema.method({
