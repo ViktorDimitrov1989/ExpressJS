@@ -21,7 +21,10 @@ module.exports = (app) => {
     //comment hotel
     app.post('/comment/:id', auth.isAuthenticated, controllers.hotel.addComment);
     //user profile
-    app.get('/profile/:username', auth.isAuthenticated, controllers.user.profile)
+    app.get('/profile/:username', auth.isAuthenticated, controllers.user.profile);
+    //like hotel
+    app.get('/like/:id', controllers.hotel.like);
+
     app.all('*', (req,res) => {
         res.status(404);
         res.send('404 Not Found');
