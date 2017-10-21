@@ -26,7 +26,6 @@ module.exports = {
             if(req.user){
                 isAdmin = req.user.roles.indexOf('Admin') >= 0;
             }
-            console.log(isAdmin);
 
             res.render('category/categoryList', {categories: categories, isAdmin: isAdmin});
         });

@@ -1,5 +1,6 @@
 const encryprtion = require('../utils/encryprtion');
 const User = require('../models/User');
+const notification = require('../utils/notificationHandler');
 
 module.exports = {
     registerGet: (req, res) => {
@@ -77,8 +78,9 @@ module.exports = {
 
         function errorhandler(reason){
             console.log(reason);
-            res.locals.globalError = reason;
-            res.render('users/login');
+            notification.redirectAndNotify(req,res,'users/login', reason);
+            //res.locals.globalError = reason;
+            //res.render('users/login');
         }
 
     },
