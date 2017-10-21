@@ -1,0 +1,12 @@
+<h1>Categories</h1>
+
+{{#each categories}}
+<fieldset>
+    <legend>{{this.category}}</legend>
+    {{#if isAdmin}}
+        <a href="/delete/{{this._id}}"><button>Delete</button></a>
+    {{/if}}
+</fieldset>
+{{/each}}
+
+

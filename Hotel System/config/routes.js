@@ -24,6 +24,13 @@ module.exports = (app) => {
     app.get('/profile/:username', auth.isAuthenticated, controllers.user.profile);
     //like hotel
     app.get('/like/:id', controllers.hotel.like);
+    //categories
+    app.get('/addCategories', auth.hasRole('Admin'), controllers.category.addGet);
+    app.post('/addCategories', auth.hasRole('Admin'), controllers.category.addPost);
+    app.get('/delete/:category', auth.hasRole('Admin'), controllers.category.deleteCategory);
+    app.get('/categories', controllers.category.listCategories);
+    app.get('/list/:category', controllers.hotel.listByCategory);
+    
 
     app.all('*', (req,res) => {
         res.status(404);

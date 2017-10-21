@@ -1,12 +1,15 @@
 const mongoose = require('mongoose');
 const Hotel = mongoose.model('Hotel');
 const Coment = mongoose.model('Comment');
+const Category = require('mongoose').model('Category');
 
 module.exports = {
 
     addGet: (req, res) => {
+        Category.find({}).then((categories) => {
+            res.render('hotels/generateHotel', { categories: categories });
+        })
 
-        res.render('hotels/generateHotel');
     },
     addPost: (req, res) => {
         let hoteltoCreate = {
@@ -19,13 +22,20 @@ module.exports = {
         }
 
 
-
         Hotel.create(hoteltoCreate).then((createdHotel) => {
-            req.user.hotels.push(createdHotel._id);
-            req.user.save().then(() => {
-                res.locals.successMessage = 'Hotel created';
-                res.render('home/index');
+
+            Category.findById(req.body.category).then((cat) => {
+                cat.hotels.push(createdHotel._id);
+                req.user.hotels.push(createdHotel._id);
+                cat.save().then(() => {
+                    req.user.save().then(() => {
+                        res.locals.successMessage = 'Hotel created';
+                        res.render('home/index');
+                    })
+                })
+
             })
+
         })
     },
     list: (req, res) => {
@@ -35,11 +45,11 @@ module.exports = {
         Hotel.count({}).then(hotelCount => {
             let limit = 2;
             let maxPages = Math.ceil(hotelCount / limit);
-            
-            if(page > maxPages){
+
+            if (page > maxPages) {
                 page = maxPages;
             }
-            if(page < 0){
+            if (page < 0) {
                 page = 1;
             }
 
@@ -49,7 +59,7 @@ module.exports = {
             }
 
             Hotel.find({}).sort('-creationDate').skip((page - 1) * limit).limit(limit).then((hotels) => {
-                res.render('hotels/hotelList', { hotels: hotels, pages:pages });
+                res.render('hotels/hotelList', { hotels: hotels, pages: pages });
             })
         })
 
@@ -114,5 +124,14 @@ module.exports = {
         })
 
 
+    },
+    listByCategory: (req, res) => {
+        let categoryName = req.params.category;
+
+        Category.findOne({ category: categoryName })
+            .populate('hotels').then((category) => {
+                let hotels = category.hotels;
+                res.render('hotels/hotelList', {hotels: hotels});
+            })
     }
 };
