@@ -28,6 +28,8 @@
             </ul>
         </header>
         <main>
+            {{> flash}}
+
             {{#if successMessage}}
             <span>{{successMessage}}</span> {{/if}} 
             {{#if globalError}}

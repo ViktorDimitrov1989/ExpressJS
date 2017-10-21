@@ -99,7 +99,12 @@ module.exports = {
                 req.user.comments.push(createdComment._id);
                 hotel.save().then(() => {
                     req.user.save().then(() => {
-                        res.redirect(`/details?id=${hotelId}`);
+                        req.flash('errors', { msg: 'User with that email already exists.' });
+                        //res.locals.messages.info = 'Comment posted!';
+                        console.log(res.locals);
+                        console.log(req.flash())
+                        //res.redirect(`/details?id=${hotelId}`);
+                        res.redirect('/');
                     })
                 })
             })

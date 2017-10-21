@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
 
-
 module.exports = (app) => {
     app.engine('hbs', handlebars({
         defaultLayout: 'main',
@@ -32,6 +31,5 @@ module.exports = (app) => {
     app.set('view engine', '.hbs');
 
     app.use(express.static('./static'));
-
     console.log('Express ready.');
 }

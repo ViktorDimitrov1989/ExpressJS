@@ -1,7 +1,9 @@
 const controllers = require('../controllers');
 const auth = require('../utils/auth');
 
+
 module.exports = (app) => {
+
     app.get('/', controllers.home.index);
     app.get('/about', controllers.home.about);
 
@@ -30,9 +32,9 @@ module.exports = (app) => {
     app.get('/delete/:category', auth.hasRole('Admin'), controllers.category.deleteCategory);
     app.get('/categories', controllers.category.listCategories);
     app.get('/list/:category', controllers.hotel.listByCategory);
-    
 
-    app.all('*', (req,res) => {
+
+    app.all('*', (req, res) => {
         res.status(404);
         res.send('404 Not Found');
         res.end();

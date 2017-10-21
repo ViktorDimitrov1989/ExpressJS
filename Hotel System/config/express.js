@@ -4,9 +4,12 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
-
+const flash = require('express-flash');
 
 module.exports = (app) => {
+    //flash
+    app.use(flash());
+
     app.engine('hbs', handlebars({
         defaultLayout: 'main',
         extname: '.hbs'
@@ -22,10 +25,11 @@ module.exports = (app) => {
     app.use(passport.initialize());
     app.use(passport.session());
 
-    app.use((req,res,next) => {
-        if(req.user){
+    app.use((req, res, next) => {
+        if (req.user) {
             res.locals.currentUser = req.user;
         }
+
         next();
     })
 
